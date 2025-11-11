@@ -12,15 +12,27 @@ PLOTS = DATA / "plots"
 st.set_page_config(page_title="Energy Forecasting", layout="wide")
 st.title("⚡ Energy Demand Forecasting — Demo Dashboard")
 
+API_BASE = "https://energy-forecast-api.onrender.com"
+
+# User selects forecast horizon
+horizon = st.selectbox("Forecast horizon (hours)", [24, 168], index=0)
+
 try:
-    res = requests.get(f"http://127.0.0.1:8000/forecast?horizon={horizon}", timeout=3)
+    res = requests.get(f"{API_BASE}/forecast", params={"horizon": horizon}, timeout=8)
+
     if res.ok:
-        val = res.json()["forecast_mw"]
-        st.success(f"API forecast (t+{horizon}h): {val:,.1f} MW")
+        val = res.json().get("forecast_mw", None)
+        if val is not None:
+            st.success(f"✅ API forecast (t+{horizon}h): {val:,.1f} MW")
+        else:
+            st.warning("⚠️ No forecast value in API response.")
     else:
-        st.warning("API not responding. Start it with: uvicorn api.main:app --reload")
-except Exception:
-    st.info("Start the API server to see live forecast.")
+        st.error(f"❌ API error {res.status_code}: {res.text}")
+
+except Exception as e:
+    st.warning(f"🌐 Could not reach API: {e}")
+    st.info("Ensure your Render API is live at https://energy-forecast-api.onrender.com")
+
 horizon = st.selectbox("Forecast horizon", [24, 168], index=0)
 
 # Load predictions & metrics
