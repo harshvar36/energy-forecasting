@@ -1,6 +1,12 @@
-region: "PJM"              # default dataset target
-freq: "H"                  # hourly
+region: "AEP"
+freq: "H"
 target: "load_mw"
 forecast_horizons: [24, 168]
 timezone: "US/Eastern"
 seed: 42
+
+# weather fetch settings
+latitude: 39.9612
+longitude: -82.9988
+start_date: "2004-10-01"     
+end_date: "2018-08-03"       
