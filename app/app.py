@@ -12,7 +12,7 @@ PLOTS = DATA / "plots"
 st.set_page_config(page_title="Energy Forecasting", layout="wide")
 st.title("⚡ Energy Demand Forecasting — Demo Dashboard")
 
-API_BASE = "https://energy-forecast-api.onrender.com"
+API_BASE = "https://energy-forecasting-03iz.onrender.com"
 
 # User selects forecast horizon
 horizon = st.selectbox("Forecast horizon (hours)", [24, 168], index=0)
@@ -31,7 +31,7 @@ try:
 
 except Exception as e:
     st.warning(f"🌐 Could not reach API: {e}")
-    st.info("Ensure your Render API is live at https://energy-forecast-api.onrender.com")
+    st.info("Ensure your Render API is live at https://energy-forecasting-03iz.onrender.com")
 
 horizon = st.selectbox("Forecast horizon", [24, 168], index=0)
 
