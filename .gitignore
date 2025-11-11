@@ -1,0 +1,1 @@
+"data/\n*.env\n.mlflow/\n.dvc/\n__pycache__/\n*.pyc\n" 
