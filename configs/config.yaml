@@ -1,0 +1,6 @@
+region: "PJM"              # default dataset target
+freq: "H"                  # hourly
+target: "load_mw"
+forecast_horizons: [24, 168]
+timezone: "US/Eastern"
+seed: 42
