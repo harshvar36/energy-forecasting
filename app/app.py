@@ -5,6 +5,7 @@ from pathlib import Path
 import streamlit as st
 import plotly.graph_objects as go
 import requests
+import os
 
 DATA = Path("data/processed")
 PLOTS = DATA / "plots"
@@ -12,26 +13,25 @@ PLOTS = DATA / "plots"
 st.set_page_config(page_title="Energy Forecasting", layout="wide")
 st.title("⚡ Energy Demand Forecasting — Demo Dashboard")
 
-API_BASE = "https://energy-forecasting-6h4y.onrender.com"
+API_BASE = os.getenv("API_BASE", "http://127.0.0.1:10000")
 
 # User selects forecast horizon
 horizon = st.selectbox("Forecast horizon (hours)", [24, 168], index=0)
 
-try:
-    res = requests.get(f"{API_BASE}/forecast", params={"horizon": horizon}, timeout=8)
-
-    if res.ok:
-        val = res.json().get("forecast_mw", None)
-        if val is not None:
-            st.success(f"✅ API forecast (t+{horizon}h): {val:,.1f} MW")
+with st.spinner("Fetching prediction from API..."):
+    try:
+        res = requests.get(f"{API_BASE}/forecast", params={"horizon": horizon}, timeout=12)
+        if res.ok:
+            val = res.json().get("forecast_mw")
+            if val is not None:
+                st.success(f"✅ API forecast (t+{horizon}h): {val:,.1f} MW")
+            else:
+                st.warning("⚠️ No forecast value in API response.")
         else:
-            st.warning("⚠️ No forecast value in API response.")
-    else:
-        st.error(f"❌ API error {res.status_code}: {res.text}")
+            st.error(f"❌ API error {res.status_code}: {res.text}")
+    except Exception as e:
+        st.warning(f"🌐 Could not reach API at {API_BASE}: {e}")
 
-except Exception as e:
-    st.warning(f"🌐 Could not reach API: {e}")
-    st.info("Ensure your Render API is live at https://energy-forecasting-6h4y.onrender.com")
 
 horizon = st.selectbox("Forecast horizon", [24, 168], index=0)
 

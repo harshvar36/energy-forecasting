@@ -6,7 +6,19 @@ from pathlib import Path
 import joblib
 from src.features.build_features import load_processed, build_features
 
-app = FastAPI(title="Energy Forecast API", version="0.1")
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="Energy Forecast API")
+
+# allow calls from Streamlit or any origin during demo
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # change to your Streamlit origin for production
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 
 class ForecastResponse(BaseModel):
     horizon: int
