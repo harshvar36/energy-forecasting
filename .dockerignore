@@ -1,0 +1,9 @@
+__pycache__
+*.pyc
+.git
+.env
+.vscode
+.idea
+data/raw/*
+data/processed/*   # remove if you have small processed artifacts you want inside container
+tests/
