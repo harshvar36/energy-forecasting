@@ -7,6 +7,32 @@ import plotly.graph_objects as go
 import requests
 import os
 
+# safe imports with fallback message
+missing = []
+try:
+    import plotly.graph_objects as go
+except Exception as e:
+    go = None
+    missing.append("plotly")
+
+try:
+    import pandas as pd
+except Exception:
+    pd = None
+    missing.append("pandas")
+
+# show a helpful message if anything missing
+if missing:
+    st.set_page_config(page_title="Energy Forecasting", layout="wide")
+    st.title("⚡ Energy Demand Forecasting — Demo Dashboard")
+    st.error(
+        "This app is missing Python packages: "
+        + ", ".join(missing)
+        + ".\n"
+        "Please wait while the app finishes building, or ensure these packages are listed in requirements.txt."
+    )
+    st.stop()
+
 DATA = Path("data/processed")
 PLOTS = DATA / "plots"
 
