@@ -1,26 +1,26 @@
-# Dockerfile
+# Dockerfile for Streamlit frontend
 FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
-# Install minimal OS packages (kept light)
+# system packages: keep minimal
 RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy pinned runtime requirements for API
-COPY requirements-api.txt /app/requirements-api.txt
-
-# Install Python deps (no cache)
+# copy requirements and install
+COPY requirements-streamlit.txt /app/requirements-streamlit.txt
 RUN python -m pip install --upgrade pip setuptools wheel && \
-    python -m pip install --no-cache-dir -r /app/requirements-api.txt
+    python -m pip install --no-cache-dir -r /app/requirements-streamlit.txt
 
-# Copy project files
+# copy project
 COPY . /app
 
-# Expose the port used by Uvicorn in Render config
-EXPOSE 10000
+# Streamlit uses PORT env var on many hosts; default to 8501 locally
+ENV PORT=8501
 
-# Run the FastAPI app
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "api.main:app", "--bind", "0.0.0.0:10000", "--workers", "1", "--timeout", "120"]
+EXPOSE 8501
+
+# start Streamlit (bind to all interfaces)
+CMD ["sh", "-c", "streamlit run app/app.py --server.port $PORT --server.address 0.0.0.0"]

@@ -7,3 +7,4 @@ __pycache__
 data/raw/*
 data/processed/*   # remove if you have small processed artifacts you want inside container
 tests/
+
