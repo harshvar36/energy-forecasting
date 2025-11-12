@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import streamlit as st
-import plotly.graph_objects as go
 import requests
 import os
 
