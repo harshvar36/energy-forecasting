@@ -1,4 +1,4 @@
-# runtime-only deps (no SHAP/Optuna/MLflow/etc.)
+# --- runtime-only deps: all have manylinux wheels for Py 3.10 ---
 fastapi==0.111.0
 uvicorn[standard]==0.30.1
 pydantic==2.8.2
@@ -6,10 +6,10 @@ pydantic-core==2.20.1
 typing_extensions==4.12.2
 
 numpy==1.26.4
-pandas==2.2.2
+# If this still fails for you on Render, switch to 2.2.2 → 2.1.4 below
+pandas==2.1.4
 pyarrow==15.0.2
 joblib==1.4.2
 scikit-learn==1.4.2
 lightgbm==4.3.0
-
 python-dateutil==2.9.0.post0
